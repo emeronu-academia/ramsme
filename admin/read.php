@@ -72,8 +72,14 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
  $nheader->head_admin_home();
  ?>
     
-    <div class="wrapper">
-        <div class="container-fluid ">
+     <div id="main-wrapper" class="container">
+    <div class="row justify-content-center">
+        
+        <div class="col-xl-10">
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <div class="row no-gutters">
+                        
             <div class="row">
                 <div class="col-md-12">
                     <h1 class="mt-5 mb-3">View Record</h1>
@@ -90,7 +96,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
                         <label><b>Passport</b></label>
                           
                             <?php if($location != ""): ?>
-		           <p> <img id="blah" src="upload/<?php echo $row["location"];  ?>" width="100px" height="100px" style="border:1px solid #333333;"></p>
+		           <p> <img id="blah" src="../upload/img/<?php echo $row["location"];  ?>" width="100px" height="100px" style="border:1px solid #333333;"></p>
 			    <?php else: ?>
 			    <p><img id="blah" src="../images/default.png" width="100px" height="100px"></p>
 			    <?php endif; ?>
@@ -118,6 +124,7 @@ if(isset($_GET["id"]) && !empty(trim($_GET["id"]))){
             </div>        
         </div>
     </div>
+                </div></div></div></div>
 
         <?php
  

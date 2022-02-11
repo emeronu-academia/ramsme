@@ -12,11 +12,13 @@ include_once 'headfoot/footer_class.php';
  $nheader->head_main();
 
  ?>
+    <div id="main-wrapper" class="container">
+        <div class="row justify-content-center">
 
-
+        <img src="../images/ramsme.png" class="img-thumbnail" alt="...">
     
-   
-   
+        </div><!-- comment -->
+    </div>
 
  <?php
  

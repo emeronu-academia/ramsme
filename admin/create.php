@@ -122,9 +122,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
     } else{
         $addinfo = trim($_POST["addinfo"]);
     }
-    
-      
-    //// Immage File Processing Begin
+     //// Immage File Processing Begin
         $imgFile = $_FILES['v_user_image']['name'];
         $tmp_dir = $_FILES['v_user_image']['tmp_name'];
         $imgSize = $_FILES['v_user_image']['size'];
@@ -143,7 +141,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         $valid_extensions = array('jpeg', 'jpg', 'png', 'gif'); // valid extensions
   
         // rename uploading image
-        $userpic = rand(1000,1000000).".".$imgExt;
+          $imgFilename =  "img". $mobile_no ."." . $imgExt;
     
         // allow valid image file formats
         if(in_array($imgExt, $valid_extensions))
@@ -151,8 +149,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         // Check file size '5MB'
         if($imgSize < 5000000)   
             {
-             move_uploaded_file($tmp_dir,"upload/" . $imgFile);			
-	     $location = $imgFile;
+             move_uploaded_file($tmp_dir,"../upload/img/" . $imgFilename);			
+	     $location = $imgFilename;
             
             }
             else
@@ -165,11 +163,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             }
         }
         
-        
-                                                              
-        //
-        
-         // Validate password
+      // Validate password
     if(empty(trim($_POST["password"]))){
         $password_err = "Please enter a password.";     
     } elseif(strlen(trim($_POST["password"])) < 6){

@@ -1,10 +1,11 @@
 <?php
+  ob_start();
+?>
+<?php
 
 // Include config file
 define('__ROOT__', dirname(dirname(__FILE__)));
 require_once(__ROOT__.'/config.php');
-require_once(__ROOT__.'/headfoot/header_class.php');
-require_once(__ROOT__.'/headfoot/footer_class.php');
 
 ?>
 
@@ -63,12 +64,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                     // Bind result variables
                     mysqli_stmt_bind_result($stmt, $id, $mobile_no, $name_value, $role, $hashed_password);
                     if(mysqli_stmt_fetch($stmt)){
+                       // $hash_pass = password_hash($password, PASSWORD_DEFAULT);
                         if(password_verify($password, $hashed_password)){
                             // Password is correct, so start a new session
                             session_start();
                             
                             // Store data in session variables
-                            $_SESSION["registeration"] = false;
+                            
                             $_SESSION["loggedin"] = true;
                             $_SESSION["id"] = $id;
                             $_SESSION["mobile_no"] = $mobile_no; 
@@ -79,11 +81,11 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                             {
                             // Redirect user to welcome page
                             //header("location: /crud/crud_index.php");
-                             header("location: /admin/admin_home.php");   
+                             header("location: ../admin/admin_home.php");   
                             }
                             else 
                             {
-                                header("location: /access/account.php");
+                                header("location: ../access/account.php");
                                 
                             }
                         } else{
@@ -113,27 +115,55 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 <html lang="en">
     
     
- <?php
- $nheader = new header_class();
- $nheader->head_login();
+ <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>RAMSME | Login</title>
+    <link rel="stylesheet" href="../assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="../assets/css/Navigation-with-Button.css">
+    <link rel="stylesheet" href="../assets/css/styles.css">
+     <link rel="stylesheet" href="../assets/css/White-Footer.css">
+    <link rel="stylesheet" href="../assets/css/Login-with-overlay-image.css">
+     <style>
+        .wrapper{
+            width: 1500px;
+            margin: 0 auto;
+        }
+        table tr td:last-child{
+            width: 120px;
+        }
+    </style>  
+</head>
+<body id="page-top">
+    
+    <nav class="navbar navbar-light navbar-expand-lg navigation-clean-button">
+        <div class="container"><a class="navbar-brand" href="#">RAMSME</a><button data-bs-toggle="collapse" class="navbar-toggler" data-bs-target="#navcol-1"><span class="visually-hidden">Toggle navigation</span><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navcol-1">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="about_us.php" target="_self">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/paystack/initialize.php" target="_self">Pay</a></li>
+                  <!--  <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">Dropdown </a>
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item" href="/paystack/initialize.php">Pay</a>
+                            <a class="dropdown-item" href="#">Second Item</a>
+                            <a class="dropdown-item" href="#">Third Item
+                         </a></div>
+                    </li> -->
+                </ul><span class="navbar-text actions"> <a class="login" href="/access/logout.php" target="_self">Log Out</a><a class="btn btn-light action-button" role="button" href="/access/register.php" target="_self">Sign Up</a></span>
+            </div>
+        </div>
+    </nav>
 
- ?>
-
-    <div class="wrapper">
-        <div class="container-fluid">
+    <div id="main-wrapper" class="container">
+        <div class="row justify-content-center">
         
         <?php 
         if(!empty($login_err)){
             echo '<div class="alert alert-danger">' . $login_err . '</div>';
         }        
         ?>
-        
       
-       <div id="main-wrapper" class="container">
-    <div class="row justify-content-center">
-        <div class="col-xl-10">
-            <div class="card border-0">
-                <div class="card-body p-0">
                     <div class="row no-gutters">
                         <div class="col-lg-6">
                             <div class="p-5">
@@ -157,35 +187,91 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
                       <p>Don't have an account? <a href="/access/register.php">Sign up now</a></p>
                             </div>
                         </div>
-                        <div class="col-lg-6 d-none d-lg-inline-block">
-                            <div class="account-block rounded-right">
-                                <div class="overlay rounded-right"></div>
-                                <div class="account-testimonial">
-                                    <h4 class="text-white mb-4">This beautiful theme yours!</h4>
-                                    <p class="lead text-white">&quot;Best investment i made for a long time. Can only recommend it for other users.&quot;</p>
-                                    <p>- Admin User</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-           
+              
         </div>
     </div>
-</div>
+
    
 
         
          </div>
     </div>
+  
 
- <?php
- 
- $nfooter = new footer_class();
- $nfooter->foot_main();
- 
- ?>
+
+
+ <footer class="footer_area section_padding_130_0">
+      <div class="container" >
+        <div class="row">
+          <!-- Single Widget-->
+          <div class="col-12 col-sm-6 col-lg-4">
+            <div class="single-footer-widget section_padding_0_130">
+              <!-- Footer Logo-->
+              <div class="footer-logo mb-3"></div>
+              <p>Residents Association of Ministry of Mines and Steel MidHill Estate Managment Suites.</p>
+              
+              <div class="copywrite-text mb-5">
+                <p class="mb-0">Made with <i class="lni-heart mr-1"></i>by<a class="ml-1" href="https://ejosytechconsult.com"> Ejosy Tech Consult Ltd</a></p>
+              </div>
+              <!-- Footer Social Area-->
+              <div class="footer_social_area"><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Pinterest"><i class="fa fa-pinterest"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Skype"><i class="fa fa-skype"></i></a><a href="#" data-toggle="tooltip" data-placement="top" title="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></div>
+            </div>
+          </div>
+          <!-- Single Widget-->
+          <div class="col-12 col-sm-6 col-lg">
+            <div class="single-footer-widget section_padding_0_130">
+              <!-- Widget Title-->
+              <h5 class="widget-title">About</h5>
+              <!-- Footer Menu-->
+              <div class="footer_menu">
+                <ul>
+                  <li><a href="about_us.php">About Us</a></li>
+                  <li><a href="#">Terms &amp; Policy</a></li>
+                  <li><a href="#">Community</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Single Widget-->
+          <div class="col-12 col-sm-6 col-lg">
+            <div class="single-footer-widget section_padding_0_130">
+              <!-- Widget Title-->
+              <h5 class="widget-title">Support</h5>
+              <!-- Footer Menu-->
+              <div class="footer_menu">
+                <ul>
+                  <li><a href="#">Help</a></li>
+                  <li><a href="#">Support</a></li>
+                  <li><a href="#">Privacy Policy</a></li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+          <!-- Single Widget-->
+          <div class="col-12 col-sm-6 col-lg">
+            <div class="single-footer-widget section_padding_0_130">
+              <!-- Widget Title-->
+              <h5 class="widget-title">Contact</h5>
+              <!-- Footer Menu-->
+              <div class="footer_menu">
+                <ul>
+                  <li><a href="#">Contact Us</a></li>
+                  
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+          <p>©&nbsp; Ejosy Tech Consult Ltd 2022. All Rights Reserved.</p>
+      </div>
+    </footer>
+   
+    <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+    
+    </body>
 </html>
 
 
+<?php
+  ob_end_flush();
+?>

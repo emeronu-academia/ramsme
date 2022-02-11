@@ -12,15 +12,21 @@
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="container-fluid">
+     <div id="main-wrapper" class="container">
+    <div class="row justify-content-center">
+        
+        <div class="col-xl-10">
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <div class="row no-gutters">
             <div class="row">
                 <div class="col-md-12">
                     <h2 class="mt-5 mb-3">Invalid Request</h2>
-                    <div class="alert alert-danger">Sorry, you've made an invalid request. Please <a href="crud_index.php" class="alert-link">go back</a> and try again.</div>
+                    <div class="alert alert-danger">Sorry, you've made an invalid request. Please <a href="admin_home.php" class="alert-link">go back</a> and try again.</div>
                 </div>
             </div>        
         </div>
     </div>
+                 </div> </div> </div> </div>
 </body>
 </html>

@@ -1,4 +1,8 @@
 <?php
+  ob_start();
+?>
+
+<?php
 
 // Include config file
 define('__ROOT__', dirname(dirname(__FILE__)));
@@ -26,9 +30,14 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
  $nheader->head_admin_home();
  ?>
     
-
-    <div class="wrapper">
-        <div class="container-fluid">
+<div id="main-wrapper" class="container">
+    <div class="row justify-content-center">
+        
+        <div class="col-xl-10">
+            <div class="card border-0">
+                <div class="card-body p-0">
+                    <div class="row no-gutters">
+                        
                  <h1 class="my-5">Hi, <b><?php echo htmlspecialchars($_SESSION["name_value"]); ?></b>. Welcome to the Admin Portal site.</h1>
      
             <div class="row">
@@ -67,7 +76,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         //
                                        ?> <td style="text-align:center; margin-top:10px; word-break:break-all; width:450px; line-height:100px;"><a href="#<?php echo $row['id'];?>" data-bs-target ="#<?php echo $row['id'];?>" data-bs-toggle="modal">
 									<?php if($row['location'] != ""): ?>
-									<img src="upload/<?php echo $row['location']; ?>" width="100px" height="100px" style="border:1px solid #333333;">
+									<img src="../upload/img/<?php echo $row['location']; ?>" width="100px" height="100px" style="border:1px solid #333333;">
 									<?php else: ?>
 									<img src="images/default.png" width="100px" height="100px" style="border:1px solid #333333;">
 									<?php endif; ?>
@@ -98,7 +107,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 								</div>
 								<div class="modal-body">
 								<?php if($row['location'] != ""): ?>
-								<img src="upload/<?php echo $row['location']; ?>" style="width:390px; border-radius:9px; border:5px solid #d0d0d0; margin-left: 63px; height:387px;">
+								<img src="../upload/img/<?php echo $row['location']; ?>" style="width:390px; border-radius:9px; border:5px solid #d0d0d0; margin-left: 63px; height:387px;">
 								<?php else: ?>
 								<img src="images/default.png" style="width:390px; border-radius:9px; border:5px solid #d0d0d0; margin-left: 63px; height:387px;">
 								<?php endif; ?>
@@ -132,6 +141,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
          </p>
         </div>
     </div>
+                 </div> 
+        </div> 
+    </div> 
+</div>
      
     
     
@@ -143,3 +156,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
  ?>
     
 </html>
+
+<?php
+  ob_end_flush();
+?>
