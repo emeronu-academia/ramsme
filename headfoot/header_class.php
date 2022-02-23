@@ -38,8 +38,9 @@ class header_class
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="about_us.php" target="_self">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/paystack/initialize.php" target="_self">Pay</a></li>
-                  <!--  <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">Dropdown </a>
+                    <li class="nav-item"><a class="nav-link" href="/print/index.php" target="_self">Print</a></li>
+                  <!--    <li class="nav-item"><a class="nav-link" href="/paystack/initialize.php" target="_self">Pay</a></li>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">Dropdown </a>
                         <div class="dropdown-menu">
                             <a class="dropdown-item" href="/paystack/initialize.php">Pay</a>
                             <a class="dropdown-item" href="#">Second Item</a>
@@ -89,14 +90,15 @@ class header_class
             <div class="collapse navbar-collapse" id="navcol-1">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="about_us.php" target="_self">About Us</a></li>
+                    
                     <li class="nav-item"><a class="nav-link" href="/paystack/initialize.php" target="_self">Pay</a></li>
-                  <!--  <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">Dropdown </a>
+                    <li class="nav-item dropdown"><a class="dropdown-toggle nav-link" aria-expanded="false" data-bs-toggle="dropdown" href="#">Update Records</a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="/paystack/initialize.php">Pay</a>
-                            <a class="dropdown-item" href="#">Second Item</a>
-                            <a class="dropdown-item" href="#">Third Item
+                            <a class="dropdown-item" href="../admin/review_security/sec_pay_update.php">Security</a>
+                             <a class="dropdown-item" href="../review_infrac/infras_pay_update.php">Infrastructure</a>
+                             <a class="dropdown-item" href="../admin/review_complains/complain_view.php">Complain</a>
                          </a></div>
-                    </li> -->
+                    </li> 
                 </ul><span class="navbar-text actions"> <a class="login" href="/access/logout.php" target="_self">Log Out</a><a class="btn btn-light action-button" role="button" href="../index.php" target="_self">Home</a></span>
             </div>
         </div>

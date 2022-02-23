@@ -11,7 +11,7 @@ require_once(__ROOT__.'/config.php');
 
   
 // Define variables and initialize with empty values
-$mobile_no = $name_value= $addinfo = $occupancy = $role = $email= $avenue = $street = $password = $confirm_password = "";
+$mobile_no = $name_value= $addinfo = $occupancy = $role = $email= $avenue = $street =  $effective_date = $password = $confirm_password = "";
 $mobile_no_err = $name_err = $role_err = $addinfo_err = $email_err= $avenue_err = $street_err = $password_err = $confirm_password_err = "";
  
 
@@ -113,6 +113,26 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
         $street = trim($_POST["street"]);
     }
     
+     // Validate Effective_date
+    if(empty(trim($_POST["effective_date"]))){
+        $effective_date_err = "Please enter the Effective Date of joining the Association";
+    } elseif(!filter_var(trim($_POST["effective_date"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z0-9\s]+$/"))))
+    {
+        $effective_date_err = "Please enter the Effective Date of joining the Association";
+    } else{
+        $street = trim($_POST["effective_date"]);
+    }
+    
+        // Validate conribution as at December, 2021
+    if(empty(trim($_POST["contr_dec21"]))){
+        $contr_dec21_err = "Please provide conribution as at December, 2021";
+    } elseif(!filter_var(trim($_POST["contr_dec21"]), FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z0-9\s]+$/"))))
+    {
+       $contr_dec21_err = "Please provide conribution as at December, 2021";
+    } else{
+        $contr_dec21 = trim($_POST["contr_dec21"]);
+    }
+    
      // Validate Additional Information
     if(empty(trim($_POST["addinfo"]))){
         $addinfo_err = "Please Enter Additional Information.";
@@ -186,12 +206,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             
           
         // Prepare an insert statement
-        $sql = "INSERT INTO users (mobile_no,name_value, avenue, street, email, occupancy, role,location,addinfo, password) VALUES (?,?,?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO users (mobile_no,name_value, avenue, street, email, occupancy, role,location,effective_date,contr_dec21,addinfo, password) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
          
         if($stmt = mysqli_prepare($link, $sql))
         {
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssssssssss", $param_mobile_no, $param_name,$param_avenue, $param_street,$param_email,$param_occupancy,$param_role, $param_location, $param_addinfo,$param_password);
+            mysqli_stmt_bind_param($stmt, "ssssssssssss", $param_mobile_no, $param_name,$param_avenue, $param_street,$param_email,$param_occupancy,$param_role, $param_location,$param_effective_date,$param_contr_dec21, $param_addinfo,$param_password);
             
             // Set parameters
             $param_mobile_no = $mobile_no;
@@ -202,6 +222,8 @@ if($_SERVER["REQUEST_METHOD"] == "POST")
             $param_email = $email;
             $param_avenue = $avenue;
             $param_street = $street;
+            $param_effective_date = $effective_date;
+            $param_contr_dec21 = $contr_dec21;
             $param_addinfo = $addinfo;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
           

@@ -10,7 +10,7 @@ require_once(__ROOT__.'/headfoot/footer_class.php');
 
 
 // Define variables and initialize with empty values
-$name = $mobile_no = $phone = $avenue = $street = $email = $role =  $occupancy = $addinfo = "";
+$name = $mobile_no = $phone = $avenue = $street = $email = $role =  $occupancy = $addinfo =  $effective_date = $contr_dec21 = "";
 $name_err = $phone_err = $avenue_err = $street_err = $email_err = $role_err = $occupancy_err = $addinfo_err = $location_err= "";
 
 // Check existence of id parameter before processing further
@@ -131,8 +131,22 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     } else{
         $role = $input_role;
     }
+     // Validate Effective_date
+   $input_effective_date = trim($_POST["effective_date"]);
+    if(empty($input_effective_date)){
+        $effective_date_err = "Please enter an Effective_date.";     
+    } else{
+        $effective_date = $input_effective_date;
+    }
+     // Validate Contribution Made before Dec. 2021
+   $input_contr_dec21 = trim($_POST["contr_dec21"]);
+    if(empty($input_contr_dec21)){
+        $contr_dec21_err = "Please enter Contribution Made before Dec. 2021 if any.";     
+    } else{
+        $contr_dec21 = $input_contr_dec21;
+    }
     
-    // Validate Additiional Information
+    // Validate Additional Information
    $input_addinfo = trim($_POST["addinfo"]);
     if(empty($input_addinfo)){
         $addinfo_err = "Please enter an Value for Additional Information.";     
@@ -143,11 +157,11 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
     // Check input errors before inserting in database
      if(empty($name_err) && empty($phone_err) && empty($avenue_err) && empty($street_err)&& empty($email_err)&& empty($occupancy_err)&& empty($role_err)&& empty($addinfo_err)){
         // Prepare an update statement
-        $sql = "UPDATE users SET mobile_no=?, name_value=?, avenue=?,street=?, email=?, occupancy=?, role=?, addinfo=? WHERE id=?";
+        $sql = "UPDATE users SET mobile_no=?, name_value=?, avenue=?,street=?, email=?, occupancy=?, role=?, effective_date=?, contr_dec21=?,  addinfo=? WHERE id=?";
          
         if($stmt = mysqli_prepare($link, $sql)){
             // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssssssssi", $param_mobile_no, $param_name, $param_avenue, $param_street,$param_email, $param_occupancy, $param_role, $param_addinfo, $param_id);
+            mysqli_stmt_bind_param($stmt, "ssssssssssi", $param_mobile_no, $param_name, $param_avenue, $param_street,$param_email, $param_occupancy, $param_role, $param_effective_date, $param_contr_dec21, $param_addinfo, $param_id);
             
             // Set parameters
             $param_mobile_no = $mobile_no;
@@ -157,6 +171,8 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
             $param_email =$email;
             $param_occupancy = $occupancy;
             $param_role = $role;
+            $param_effective_date = $effective_date;
+            $param_contr_dec21 = $contr_dec21;
             $param_addinfo= $addinfo;
             $param_id = $id;
             
@@ -250,6 +266,15 @@ if(isset($_POST["id"]) && !empty($_POST["id"])){
                              <span class="invalid-feedback"><?php echo $role_err; ?></span>
                         </div>
                         
+                        <label><b>Date</b></label>
+                        <input type="date" name="effective_date" class="form-control <?php echo (!empty($effective_date_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $effective_date; ?>">
+                        <span class="invalid-feedback"><?php echo $effective_date_err;?></span>
+                        </div>
+              
+                        <div class="rf-input-container"><i class="fa fa-street-view rf-icon"></i>
+                        <input class="form-control rf-input-field" type="text" name="contr_dec21" class="form-control <?php echo (!empty($contr_dec21_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $contr_dec21; ?>" placeholder="Total Contribution Made as at December 2021" required>
+                        <span class="invalid-feedback"><?php echo $contr_dec21_err; ?></span>
+                        </div>
                         
                         
                          <div class="form-group">

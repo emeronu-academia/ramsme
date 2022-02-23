@@ -5,7 +5,7 @@ define('__ROOT__', dirname(dirname(__FILE__)));
 require_once(__ROOT__.'/config.php');
 
 // Define variables and initialize with empty values
-$name = $mobile_no = $complain = $attachment = $date = "";
+$name = $mobile_no = $complain = $attachment = $vdate = "";
 $name_err = $mobile_no_err = $complain_err = $attachment_err= $date_err = "";
  
 // Display Exist Content
@@ -16,116 +16,12 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)// Check if t
     header("location: /access/login.php");
     exit();
 }
-                  
-// Processing form data when form is submitted
-if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
-{        
-    // Validate phone
-    $input_phone = trim($_POST["mobile_no"]);
-    if(empty($input_phone)){
-        $phone_err = "Please enter the Phone Number.";     
-    } elseif(!ctype_digit($input_phone)){
-        $phone_err = "Please enter a Number.";
-    } else{
-        $mobile_no = $input_phone;
-    }
-           
-    // Validate name
-    $input_complain = trim($_POST["complain"]);
-    if(empty($input_complain)){
-        $complain_err = "Please enter your complain.";
-    } elseif(!filter_var($input_complain, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
-        $complain_err = "Please enter a valid complain.";
-    } else{
-        $complain = $input_complain;
-    }
-    
-    //// Immage File Processing Begin
-        $docFile = $_FILES['user_doc']['name'];
-        $tmp_dir = $_FILES['user_doc']['tmp_name'];
-        $docSize = $_FILES['user_doc']['size'];
-                        
-        if(empty($docFile))
-         {
-            $errMSG = "Please Select Document File.";
-         }
-         else
-        {
-      
-         // echo $upload_dir;
-         $docExt = strtolower(pathinfo($imgFile,PATHINFO_EXTENSION)); // get image extension
-  
-        // valid image extensions
-        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'pdf','doc', 'docx'); // valid extensions
-        
-        $docFilename =  "doc". $mobile_no . $docFile;
-           
-        // allow valid image file formats
-        if(in_array($docExt, $valid_extensions))
-        {   
-        // Check file size '5MB'
-        if($docSize < 5000000)   
-            {
-             move_uploaded_file($tmp_dir,"upload/doc/" . $docFilename);			
-	     $attachment = $docFilename;
-            
-            }
-            else
-            {
-            $errMSG = "Sorry, your file is too large.";
-            }
-                }
-        else{
-           $errMSG = "Sorry, only JPG, JPEG, PNG , GIF 'PDF',DOC & DOCX files are allowed.";  
-            }
-        }
-                                                        
-        //
-   
-     // Validate Avenue
-    $input_date = trim($_POST["date"]);
-    if(empty($input_date)){
-        $date_err = "Please enter an Value for the Date.";     
-    } else{
-        $date = $input_date;
-    }
-       
-    
-    // Check input errors before inserting in database
-     if( empty($phone_err) && empty($complain_err) && empty($date_err) )
-     {
-         $sql = "INSERT INTO complaintb (mobile_no, name_complain, attachment, date) VALUES (?,?,?,?)";
-         
-        if($stmt = mysqli_prepare($link, $sql))
-        {
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssss", $param_mobile_no, $param_complain, $param_attachment, $param_date);
-            
-            // Set parameters
-            $param_mobile_no = $mobile_no;
-            $param_complain = $name_complain;
-            $param_attachment = $attachment;
-            $param_date = $date;
-            //
-      
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: ../index.php");
-            } 
-            else
-            {
-                
-                echo "Oops! Something went wrong. Please try again later.";
-            }
 
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-    
- } 
 
+// Display Previous Record Content
  // Prepare a select statement
+
+
     $sql = "SELECT * FROM users WHERE mobile_no = ?";
 
              
@@ -135,7 +31,7 @@ if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
         mysqli_stmt_bind_param($stmt, "s", $param_mobile_no);
         
         // Set parameters
-        $param_mobile_no = trim(  $_SESSION["mobile_no"]);
+        $param_mobile_no = trim($_SESSION["mobile_no"]);
         
         // Attempt to execute the prepared statement
         if(mysqli_stmt_execute($stmt)){
@@ -149,8 +45,7 @@ if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
                   
                     $name_value = $row["name_value"];
                     $mobile_no = $row["mobile_no"];
-                    
-                    
+                                        
                 } else{
                     // URL doesn't contain valid id. Redirect to error page
                     header("location: error.php");
@@ -166,8 +61,128 @@ if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
         mysqli_stmt_close($stmt);
         
            // Close connection
-    mysqli_close($link);
+   // mysqli_close($link);
+                  
+// Processing form data when form is submitted
+if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
+{        
+    // Validate phone
+    $input_phone = trim($_POST["mobile_no"]);
+    if(empty($input_phone)){
+        $phone_err = "Please enter the Phone Number.";     
+    } elseif(!ctype_digit($input_phone)){
+        $phone_err = "Please enter a Number.";
+    } else{
+        $mobile_no = $input_phone;
+    }
+    
+      // Validate Name
+    $input_phone = trim($_POST["name_value"]);
+    if(empty($input_phone)){
+        $phone_err = "Please enter the Phone Number.";     
+    } elseif(!ctype_digit($input_phone)){
+        $phone_err = "Please enter a Name.";
+    } else{
+        $name_value = $input_phone;
+    }
+     
+    // Validate name
+    $input_complain = trim($_POST["complain"]);
+    if(empty($input_complain)){
+        $complain_err = "Please enter your complain.";
+    } elseif(!filter_var($input_complain, FILTER_VALIDATE_REGEXP, array("options"=>array("regexp"=>"/^[a-zA-Z\s]+$/")))){
+        $complain_err = "Please enter a valid complain.";
+    } else{
+        $complain = $input_complain;
+    }
+    
+    //// Immage File Processing Begin
+        $docFile = $_FILES['user_doc']['name'];
+        $tmp_dir = $_FILES['user_doc']['tmp_name'];
+        $docSize = $_FILES['user_doc']['size'];
         
+                             
+        if(empty($docFile))
+         {
+            $errMSG = "Please Select Document File.";
+         }
+         else
+        {
+      
+         // echo $upload_dir;
+         $docExt = strtolower(pathinfo($docFile,PATHINFO_EXTENSION)); // get image extension
+  
+        // valid image extensions
+        $valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'pdf','doc', 'docx', 'rtf', 'txt'); // valid extensions
+        
+        $docFilename =  "doc" . $mobile_no . $docFile;
+           
+        // allow valid image file formats
+        if(in_array($docExt, $valid_extensions))
+        {   
+        // Check file size '5MB'
+        if($docSize < 5000000)   
+            {
+             move_uploaded_file($tmp_dir,"upload/doc/" . $docFilename);			
+	     $attachment = $docFilename;
+            }
+            else
+            {
+            $errMSG = "Sorry, your file is too large.";
+            }
+                }
+        else{
+           $errMSG = "Sorry, only JPG, JPEG, PNG , GIF 'PDF',DOC & DOCX files are allowed.";  
+            }
+        }
+                                                        
+        //
+   
+     // Validate Date
+    $input_date = trim($_POST["vdate"]);
+    if(empty($input_date)){
+        $date_err = "Please enter an Value for the Date.";     
+    } else{
+        $vdate = $input_date;
+    }
+       
+            
+         $sql = "INSERT INTO complaintb (mobile_no, name_value, complain, attachment, vdate) VALUES (?,?,?,?,?)";
+         
+        if($stmt = mysqli_prepare($link, $sql))
+        {
+            // Bind variables to the prepared statement as parameters
+            mysqli_stmt_bind_param($stmt, "sssss", $param_mobile_no,$param_name, $param_complain, $param_attachment, $param_date);
+            
+            // Set parameters
+            $param_mobile_no = $mobile_no;
+            $param_name = $name_value;
+            $param_complain = $complain;
+            $param_attachment = $attachment;
+            $param_date = $vdate;
+            //
+      
+            // Attempt to execute the prepared statement
+            if(mysqli_stmt_execute($stmt)){
+                // Redirect to login page
+                header("location: ../index.php");
+            } 
+            else
+            {
+                // URL doesn't contain valid id. Redirect to error page
+                    header("location: error.php");
+                    echo "Oops! Something went wrong. Please try again later.";
+                    exit();
+               
+            }
+
+            // Close statement
+            mysqli_stmt_close($stmt);
+            // Close connection
+            mysqli_close($link);
+        }
+    
+  
 }
 ?>
 
@@ -225,51 +240,49 @@ if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
            <div class="row">
                 <div class="col-md-10">
                     <h2 class="mt-5">My Account</h2>
-                    <p>You May Update Your Details</p>
+                    <p>Any Complains? ...Forward your complain via this platform</p>
                     
                     <form action="<?php echo htmlspecialchars(basename($_SERVER['REQUEST_URI'])); ?>" enctype="multipart/form-data" method="post">
                         
                         <div class="form-group">
                             <label><b>Mobile Number</b></label>
-                            <input type="text" name="mobile_no" class="form-control <?php echo (!empty($phone_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $mobile_no; ?>">
+                            <input type="text" name="mobile_no" class="form-control <?php echo (!empty($phone_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $mobile_no; ?>" readonly>
                             <span class="invalid-feedback"><?php echo $phone_err;?></span>
                         </div><!-- comment -->
                         
                         <div class="form-group">
                             <label><b>Name</b></label>
-                            <input type="text" name="name_value" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name_value; ?>">
+                            <input type="text" name="name_value" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name_value; ?>" readonly>
                             <span class="invalid-feedback"><?php echo $name_err;?></span>
                         </div>
                         
                         <div class="form-group">
                             <label><b>Date</b></label>
-                            <div class="input-group date" data-provide="datepicker">
-                            <input type="text" class="form-control<?php echo (!empty($date_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $date; ?>">
+                            <input id="complaindate" type="date" name="vdate" class="form-control" required="">
                             <span class="invalid-feedback"><?php echo $date_err;?></span>
                             <div class="input-group-addon">
                                 <span class="glyphicon glyphicon-th"></span>
                             </div>
-                            </div>
-                            
                         </div>
                         
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1" class="form-label"><b>Enter your Complains here</b> </label>
-                            <textarea class="form-control" id="exampleFormControlTextarea1" name = "complain" rows="4"></textarea>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" name = "complain" rows="4" required></textarea>
                             
                         </div>
                         
                       <div class="form-group">
                             <label><b>Attachment: Support Document </b></label>
-                          
-                            <p><a id="blah" href="" target ="_blank">view uploaded file</a></p>
-                                                       
+                            <p><a id="blah" href="" target ="_blank">view uploaded file</a></p>                                                       
                             <p> <input id="imgInp"  type="file" name="user_doc" /></p>
-                                                    
-                                                      
-                        </div>
+                      </div>
                         
-                       
+                    <div class="form-group">
+                            <p><label> <b>Submit | Navigate</b> </label></p>
+                         <input type="submit" class="btn btn-primary" value="Submit"> |
+                         <a href="../access/logout.php" class="btn btn-danger">Close</a>
+                     </div>
+                      
                     </form>
                 </div>
                 
@@ -355,13 +368,13 @@ if(isset($_POST["mobile_no"]) && !empty($_POST["mobile_no"]))
             imgInp.onchange = evt => {
             const [file] = imgInp.files
             if (file) {
-                        blah.src = URL.createObjectURL(file)
-                       
+                        blah.href = URL.createObjectURL(file)
+         
                         }
               
             }
             </script>
-            <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
+            <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
 </body>
        
    

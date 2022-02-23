@@ -28,17 +28,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
      <?php
      //Pagination - 1
 		$condition	=	'';
-		if(isset($_REQUEST['mobile_no']) and $_REQUEST['mobile_no']!=""){
-			$condition	.=	' AND mobile_no LIKE "%'.$_REQUEST['mobile_no'].'%" ';
+		if(isset($_REQUEST['mobile_no']) AND ($_REQUEST['mobile_no']!="") AND isset($_REQUEST['start_date']) AND $_REQUEST['start_date']!="" AND isset($_REQUEST['end_date']) and $_REQUEST['end_date']!="")
+                {
+			 $condition .= ' AND mobile_no LIKE "%'.$_REQUEST['mobile_no'].'%" '. ' AND pay_date between '. "'" . $_REQUEST['start_date']. "'" . ' AND '. "'" .$_REQUEST['end_date']. "'";
+                        //echo $conditionx;
 		}
-		
-	?>
-    
-     <?php
+
      //Pagination - 2
 		$conditionx	=	'';
-		if(isset($_REQUEST['mobile_nox']) and $_REQUEST['mobile_nox']!=""){
-			$conditionx	.=	' AND mobile_no LIKE "%'.$_REQUEST['mobile_nox'].'%" ';
+		if(isset($_REQUEST['mobile_nox']) AND ($_REQUEST['mobile_nox']!="") AND isset($_REQUEST['start_datex']) AND $_REQUEST['start_datex']!="" AND isset($_REQUEST['end_datex']) and $_REQUEST['end_datex']!="")
+                {
+			//$conditionx .= ' AND mobile_no LIKE "%'.$_REQUEST['mobile_nox'].'%" AND pay_date between "%'.$_REQUEST['start_datex'].'%" AND "%'.$_REQUEST['end_datex'].'%" ';
+                        $conditionx .= ' AND mobile_no LIKE "%'.$_REQUEST['mobile_nox'].'%" '. ' AND pay_date between '. "'" . $_REQUEST['start_datex']. "'" . ' AND '. "'" .$_REQUEST['end_datex']. "'";
+                        //echo $conditionx;
+                        //exit();
+                       
 		}
 		
 	?>
@@ -65,8 +69,20 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 					<label>Mobile Number</label>
 					<input type="text" name="mobile_no" id="username" class="form-control" value="<?php echo isset($_REQUEST['mobile_no'])?$_REQUEST['mobile_no']:''?>" placeholder="Enter user mobile number">
 					</div>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                        <label>Start Date</label>
+					<input type="date" name="start_date" id="start_date" class="form-control" value="<?php echo isset($_REQUEST['start_date'])?$_REQUEST['start_date']:''?>" placeholder="Start Date">
 					</div>
-                		          				<div class="col-sm-4">
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <div class="form-group">
+                                        <label>End Date</label>
+					<input type="date" name="end_date" id="end_date" class="form-control" value="<?php echo isset($_REQUEST['end_date'])?$_REQUEST['end_date']:''?>" placeholder="End Date">
+					</div>
+                                    </div>
+                		    <div class="col-sm-4">
 					<div class="form-group">
 					<label>&nbsp;</label>
           				<div>
@@ -105,6 +121,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo "<th>Phone</th>";
                                         echo "<th>Amount Paid</th>";
                                          echo "<th>Remark</th>";
+                                         echo "<th>Attachment</th>";
                                          echo "<th>Action</th>";
                                     echo "</tr>";
                                 echo "</thead>";
@@ -112,14 +129,16 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                 while($row = mysqli_fetch_array($result)){
                                     echo "<tr readonly>";
                                       // echo "<td>" . $row['entry'] . "</td>";
-                                       echo "<td>" . $row['pay_date'] . "</td>";
+                                        echo "<td>" . $row['pay_date'] . "</td>";
                                         echo "<td>" . $row['name_value'] . "</td>";
                                         echo "<td>" . $row['mobile_no'] . "</td>";
                                         echo "<td>" . $row['amount'] . "</td>";
                                         echo "<td>" . $row['remark'] . "</td>";
                                         echo "<td>";
-                                       echo '<a href="sec-add.php?entry='. $row['entry'] .'" class="mr-3" title="Transfer Record" data-toggle="tooltip"><span class="fa fa-plus"></span></a>';
-                                            
+                                        echo '<a href=" '.'/activity/upload/doc/' . $row['attachment'] .'" target="_blank" class="mr-3" title="View Attachment" data-toggle="tooltip"><span class="fa fa-file"></span></a>';
+                                        echo "</td>";                                     
+                                        echo "<td>";
+                                        echo '<a href="sec-add.php?entry='. $row['entry'] .'" class="mr-3" title="Transfer Record" data-toggle="tooltip"><span class="fa fa-plus"></span></a>';
                                         echo "</td>";
                                     echo "</tr>";
                                 }
@@ -163,7 +182,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
             <!-- LINK NUMBER -->
             <?php
             // Buat query untuk menghitung semua jumlah/total data
-            $sqlx = "SELECT * FROM payments";
+            $sqlx = "SELECT * FROM payments where 1 " . $condition . "LIMIT ". $limit_start . "," . $limit;;
             mysqli_query($link, $sqlx);
             $get_jumlah = mysqli_affected_rows($link);
             $jumlah_page = ceil($get_jumlah / $limit); // Count the number of pages
@@ -232,9 +251,21 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 					<div class="form-group">
 					<label>Mobile Number</label>
 					<input type="text" name="mobile_nox" id="username" class="form-control" value="<?php echo isset($_REQUEST['mobile_nox'])?$_REQUEST['mobile_nox']:''?>" placeholder="Enter user mobile number">
+                                        </div><!-- comment -->
+                                        </div>
+                                    <div class="col-sm-2">
+					<div class="form-group">	
+                                        <label>Start Date</label>
+					<input type="date" name="start_datex" id="start_date" class="form-control" value="<?php echo isset($_REQUEST['start_datex'])?$_REQUEST['start_datex']:''?>" placeholder="Start Date">
+					</div>
+                                        </div>
+                                     <div class="col-sm-2">
+                                        <div class="form-group">
+                                        <label>End Date</label>
+					<input type="date" name="end_datex" id="end_date" class="form-control" value="<?php echo isset($_REQUEST['end_datex'])?$_REQUEST['end_datex']:''?>" placeholder="End Date">
 					</div>
 					</div>
-                		          				<div class="col-sm-4">
+                		         <div class="col-sm-4">
 					<div class="form-group">
 					<label>&nbsp;</label>
           				<div>
@@ -338,7 +369,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
             <!-- LINK NUMBER -->
             <?php
             // Buat query untuk menghitung semua jumlah/total data
-            $sqlxx = "SELECT * FROM pay_sec_update";
+            $sqlxx = "SELECT * FROM pay_sec_update where 1 " . $conditionx . "LIMIT ". $limit_startx . "," . $limitx;;
             mysqli_query($link, $sqlxx);
             $get_jumlahx = mysqli_affected_rows($link);
             $jumlah_pagex = ceil($get_jumlahx / $limitx); // Count the number of pages

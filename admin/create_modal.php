@@ -2,7 +2,7 @@
 
 
 // Define variables and initialize with empty values
-$mobile_no = $name_value= $addinfo = $occupancy = $role = $email= $avenue = $street = $password = $confirm_password = "";
+$mobile_no = $name_value= $addinfo = $occupancy = $role = $email= $avenue = $street = $password = $confirm_password = $effective_date = $contr_dec21 = "";
 $mobile_no_err = $name_err = $role_err = $addinfo_err = $email_err= $avenue_err = $street_err = $password_err = $confirm_password_err = "";
 ?>
 <!-- Button trigger modal -->
@@ -76,6 +76,17 @@ $mobile_no_err = $name_err = $role_err = $addinfo_err = $email_err= $avenue_err 
             <div class="rf-input-container"><i class="fa fa-street-view rf-icon"></i>
                 <input class="form-control rf-input-field" type="text" name="street" class="form-control <?php echo (!empty($street_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $street; ?>" placeholder="Street" required>
                 <span class="invalid-feedback"><?php echo $street_err; ?></span>
+            </div>
+             <div class="rf-input-container"><i class="fa fa-street-view rf-icon"></i>
+                 
+              <label><b>Date</b></label>
+              <input type="date" name="effective_date" class="form-control <?php echo (!empty($effective_date_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $effective_date; ?>">
+              <span class="invalid-feedback"><?php echo $effective_date_err;?></span>
+            </div>
+              
+            <div class="rf-input-container"><i class="fa fa-street-view rf-icon"></i>
+                <input class="form-control rf-input-field" type="text" name="contr_dec21" class="form-control <?php echo (!empty($contr_dec21_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $contr_dec21; ?>" placeholder="Total Contribution Made as at December 2021" required>
+                <span class="invalid-feedback"><?php echo $contr_dec21_err; ?></span>
             </div>
             
             <div class="rf-input-container"><i class="fa fa-street-view rf-icon"></i>

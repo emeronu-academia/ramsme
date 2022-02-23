@@ -80,7 +80,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 			</div>
 			</div>
 			</form>
-		</div> 	</div> </div>
+		</div> 	</div> 
+                
+                </div>
            
                     <?php
                     // Include config file
@@ -105,6 +107,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo "<th>Avenue</th>";
                                          echo "<th>Street</th>";
                                          echo "<th>Occupancy</th>";
+                                         echo "<th>Effective Date </th>";
+                                         echo "<th>Contribution[Dec-2021]</th>";
                                          echo "<th>Additional Info</th>";
                                         echo "<th>Action</th>";
                                     echo "</tr>";
@@ -129,6 +133,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo "<td>" . $row['avenue'] . "</td>";
                                         echo "<td>" . $row['street'] . "</td>";
                                         echo "<td>" . $row['occupancy'] . "</td>";
+                                        echo "<td>" . $row['effective_date'] . "</td>";
+                                        echo "<td>" . $row['contr_dec21'] . "</td>";
                                         echo "<td>" . $row['addinfo'] ."</td>";
                                         echo "<td>";
                                             echo '<a href="read.php?id='. $row['id'] .'" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
