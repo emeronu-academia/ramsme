@@ -14,7 +14,7 @@ require_once(__ROOT__.'/config.php');
 session_start();   // Initialize the session
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check if the user is logged in, if not then redirect him to login page
 {
-    header("location: /access/login.php");
+    header("location: /client/login.php");
     exit();
 }
 ?>
@@ -22,7 +22,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 <html lang="en">
 
  <?php
- include 'adminCV/sec_header.php';
+ include '../adminHF/header_admin.php';
  ?>
     
      <?php
@@ -85,8 +85,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 			</div>
 			</form>
 		</div> 	</div> 
+             
                 
-                <div class="col-md-12">
+              <div class="col-md-12"> 
+                  
                     
                     <?php
                     
@@ -127,7 +129,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo '<a href=" '.'/activity/upload/doc/' . $row['attachment'] .'" target="_blank" class="mr-3" title="View Attachment" data-toggle="tooltip"><span class="fa fa-file"></span></a>';
                                         echo "</td>";                                     
                                         echo "<td>";
-                                        echo '<a href="sec-add.php?entry='. $row['entry'] .'" class="mr-3" title="Response to Complain by Email" data-toggle="tooltip"><span class="fa fa-file"></span></a>';
+                                        echo '<a href="sec-add.php?entry='. $row['entry'] .'" class="mr-3" title="Response to Complain by Email" data-toggle="tooltip"><span class="fa fa-envelope"></span></a>';
                                         echo "</td>";
                                     echo "</tr>";
                                 }
@@ -171,7 +173,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
             <!-- LINK NUMBER -->
             <?php
             // Buat query untuk menghitung semua jumlah/total data
-            $sqlx = "SELECT * FROM payments where 1 " . $condition . "LIMIT ". $limit_start . "," . $limit;;
+            $sqlx = "SELECT * FROM payments where 1 " . $condition . "LIMIT ". $limit_start . "," . $limit;
             mysqli_query($link, $sqlx);
             $get_jumlah = mysqli_affected_rows($link);
             $jumlah_page = ceil($get_jumlah / $limit); // Count the number of pages
@@ -213,21 +215,20 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
          </div>
                     
                 </div>
+                
+                </div> 
+              </div> 
+                </div> 
             </div> 
-            
-             
-        </div>
-    </div>
-                 </div> 
         </div> 
     </div> 
-    
-</div>
+  </div
+            
      
     
     
 <?php
- include 'adminCV/sec_footer.php';
+ include '../adminHF/footer_admin.php';
  ?>
     
 </html>
