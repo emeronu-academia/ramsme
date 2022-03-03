@@ -7,8 +7,7 @@
 // Include config file
 define('__ROOT__', dirname(dirname(__FILE__)));
 require_once(__ROOT__.'/config.php');
-require_once(__ROOT__.'/headfoot/header_class.php');
-require_once(__ROOT__.'/headfoot/footer_class.php');
+
 
 ?>
 
@@ -18,7 +17,7 @@ require_once(__ROOT__.'/headfoot/footer_class.php');
 session_start();   // Initialize the session
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check if the user is logged in, if not then redirect him to login page
 {
-    header("location: /access/login.php");
+    header("location: /client/login.php");
     exit();
 }
 ?>
@@ -26,8 +25,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 <html lang="en">
 
  <?php
- $nheader = new header_class();
- $nheader->head_admin_home();
+ include 'adminHF/header_admin.php';
  ?>
     <?php
 		$condition	=	'';
@@ -107,8 +105,11 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo "<th>Avenue</th>";
                                          echo "<th>Street</th>";
                                          echo "<th>Occupancy</th>";
-                                         echo "<th>Effective Date </th>";
-                                         echo "<th>Contribution[Dec-2021]</th>";
+                                         echo "<th>Effective </br> Date </th>";
+                                         echo "<th>Security </br> Contribution </br> [Dec-2021]</th>";
+                                         echo "<th>Security </br> Outstanding </br>[Dec-2021]</th>";
+                                         echo "<th>Infrastructure </br> Contribution</br>[Dec-2021]</th>";
+                                         echo "<th>Infrastructure </br> Outstanding</br>[Dec-2021]</th>";
                                          echo "<th>Additional Info</th>";
                                         echo "<th>Action</th>";
                                     echo "</tr>";
@@ -134,7 +135,10 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                                         echo "<td>" . $row['street'] . "</td>";
                                         echo "<td>" . $row['occupancy'] . "</td>";
                                         echo "<td>" . $row['effective_date'] . "</td>";
-                                        echo "<td>" . $row['contr_dec21'] . "</td>";
+                                        echo "<td>" . $row['sec_contr_dec21'] . "</td>";
+                                        echo "<td>" . $row['sec_outst_dec21'] . "</td>";
+                                        echo "<td>" . $row['infr_contr_dec21'] . "</td>";
+                                        echo "<td>" . $row['infr_outst_dec21'] . "</td>";
                                         echo "<td>" . $row['addinfo'] ."</td>";
                                         echo "<td>";
                                             echo '<a href="read.php?id='. $row['id'] .'" class="mr-3" title="View Record" data-toggle="tooltip"><span class="fa fa-eye"></span></a>';
@@ -175,7 +179,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                             echo '<div class="alert alert-danger"><em>No records were found.</em></div>';
                         }
                     } else{
-                        echo "Oops! Something went wrong. Please try again later.";
+                        header("location: error.php");
+                        //echo "Oops! Something went wrong. Please try again later.";
                     }
  
                     // Close connection
@@ -184,8 +189,7 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
                 </div>
             </div> 
              <p>
-                <a href="/access/reset-password.php" class="btn btn-warning">Reset Your Password</a>
-                <a href="/access/logout.php" class="btn btn-danger ml-3">Sign Out of Your Account</a>
+                        <a href="/client/account.php" class="btn btn-danger ml-3">Back</a>
           
              </p>
              <div>
@@ -216,8 +220,9 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
             <!-- LINK NUMBER -->
             <?php
             // Buat query untuk menghitung semua jumlah/total data
-            $sqlx = "SELECT * FROM users";
+            //$sqlx = "SELECT * FROM users";
             mysqli_query($link, $sqlx);
+            $sqlx = "SELECT * FROM users";  // where 1 " . $condition . "LIMIT ". $limit_start . "," . $limit;
             $get_jumlah = mysqli_affected_rows($link);
             $jumlah_page = ceil($get_jumlah / $limit); // Count the number of pages
             $jumlah_number = 3; // Specify the number of link numbers before and after the active page
@@ -264,12 +269,8 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)   // Check i
 </div>
      
     
-    
-<?php
- 
- $nfooter = new footer_class();
- $nfooter->foot_main();
- 
+ <?php
+ include 'adminHF/footer_admin.php';
  ?>
     
 </html>
