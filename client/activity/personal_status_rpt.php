@@ -13,7 +13,7 @@ include_once(__ROOT__.'/qrcode/qrlib.php');
 
 
 // Define variables and initialize with empty values
-$name_value = $mobile_no = $due = $paid = $difference = $role = $duex = $paidx = $differencex = $rolex ="";
+$name_value = $mobile_no = $due = $paid = $difference = $role = $sec_due = $sec_paid = $sec_difference = $infr_due = $infr_paid = $infr_difference ="";
 $name_err = $mobile_no_err = $complain_err = $attachment_err= $date_err = "";
  
 // Display Exist Content
@@ -21,7 +21,7 @@ session_start(); // Initialize the session
 
 if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)// Check if the user is logged in, if not then redirect him to login page
 {
-    header("location: /access/login.php");
+    header("location: /client/login.php");
     exit();
 }
 
@@ -31,34 +31,34 @@ if(!isset($_SESSION["loggedin"]) || $_SESSION["loggedin"] !== true)// Check if t
 
 
    // $sql = "SELECT * FROM users WHERE mobile_no = ?";
-$sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_due(users.occupancy, users.no_rooms, users.effective_date) due,sum(pay_sec_update.amount) paid, amount_due(users.occupancy, users.no_rooms, users.effective_date)- sum(pay_sec_update.amount) difference from users INNER JOIN pay_sec_update where users.mobile_no = pay_sec_update.mobile_no and  pay_sec_update.service = 'security' and users.mobile_no = ?";
+$sec_sql = "select DISTINCT users.name_value sec_name, users.mobile_no sec_mobile, amount_due(users.occupancy, users.no_rooms, users.effective_date) sec_due, sum(pay_sec_update.amount) sec_paid, amount_due(users.occupancy, users.no_rooms, users.effective_date)- sum(pay_sec_update.amount) sec_difference from users INNER JOIN pay_sec_update where users.mobile_no = pay_sec_update.mobile_no and  pay_sec_update.service = 'security' and users.mobile_no = ?";
 
              
-      if($stmt = mysqli_prepare($link, $sql))
+      if($sec_stmt = mysqli_prepare($link, $sec_sql))
       {
               // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmt, "s", $param_mobile_no);
+        mysqli_stmt_bind_param($sec_stmt, "s", $param_mobile_no);
         
         // Set parameters
         $param_mobile_no = trim($_SESSION["mobile_no"]);
         //$role = trim($_SESSION["role"]);
         
         // Attempt to execute the prepared statement
-        if(mysqli_stmt_execute($stmt)){
-            $result = mysqli_stmt_get_result($stmt);
+        if(mysqli_stmt_execute($sec_stmt)){
+            $sec_result = mysqli_stmt_get_result($sec_stmt);
     
-            if(mysqli_num_rows($result) == 1){
+            if(mysqli_num_rows($sec_result) == 1){
                 /* Fetch result row as an associative array. Since the result set
                 contains only one row, we don't need to use while loop */
-                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                $sec_row = mysqli_fetch_array($sec_result, MYSQLI_ASSOC);
                 // Retrieve individual field value
                   
                     
-                    $mobile_no = $row["mobile"];
-                    $name_value = $row["Namev"];
-                    $due = $row["due"];
-                    $paid = $row["paid"];
-                    $difference = $row["difference"];
+                    $mobile_no = $sec_row["sec_mobile"];
+                    $name_value = $sec_row["sec_name"];
+                    $sec_due = $sec_row["sec_due"];
+                    $sec_paid = $sec_row["sec_paid"];
+                    $sec_difference = $sec_row["sec_difference"];
                     
                    
                                         
@@ -69,43 +69,44 @@ $sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_d
                 }
                 
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                //echo "Oops! Something went wrong. Please try again later.";
+                header("location: error.php");
             }
         }
         
         // Close statement
-        mysqli_stmt_close($stmt);
+        mysqli_stmt_close($sec_stmt);
         
         
         // INFRASTRUCTURE 
         
-        $sqlx = "select DISTINCT users.name_value Namex, users.mobile_no mobilex, amount_due(users.occupancy, users.no_rooms, users.effective_date) duex,sum(pay_sec_update.amount) paidx, amount_due(users.occupancy, users.no_rooms, users.effective_date)- sum(pay_sec_update.amount) differencex from users INNER JOIN pay_sec_update where users.mobile_no = pay_sec_update.mobile_no and  pay_sec_update.service= 'infrastructure' and users.mobile_no = ?";
+        $infr_sql = "select DISTINCT users.name_value infr_name, users.mobile_no infr_mobile, amount_due(users.occupancy, users.no_rooms, users.effective_date) infr_due,sum(pay_sec_update.amount) infr_paid, amount_due(users.occupancy, users.no_rooms, users.effective_date)- sum(pay_sec_update.amount) infr_difference from users INNER JOIN pay_sec_update where users.mobile_no = pay_sec_update.mobile_no and  pay_sec_update.service= 'infrastructure' and users.mobile_no = ?";
         
-        if($stmtx = mysqli_prepare($link, $sqlx))
+        if($infr_stmt = mysqli_prepare($link, $infr_sql))
       {
               // Bind variables to the prepared statement as parameters
-        mysqli_stmt_bind_param($stmtx, "s", $param_mobile_no);
+        mysqli_stmt_bind_param($infr_stmt, "s", $param_mobile_no);
         
         // Set parameters
         $param_mobile_no = trim($_SESSION["mobile_no"]);
         //$role = trim($_SESSION["role"]);
         
         // Attempt to execute the prepared statement
-        if(mysqli_stmt_execute($stmtx)){
-            $result = mysqli_stmt_get_result($stmtx);
+        if(mysqli_stmt_execute($infr_stmt)){
+            $infr_result = mysqli_stmt_get_result($infr_stmt);
     
-            if(mysqli_num_rows($result) == 1){
+            if(mysqli_num_rows($infr_result) == 1){
                 /* Fetch result row as an associative array. Since the result set
                 contains only one row, we don't need to use while loop */
-                $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+                $infr_row = mysqli_fetch_array($infr_result, MYSQLI_ASSOC);
                 // Retrieve individual field value
                   
                     
                     //$mobile_no = $row["mobile"];
                     //$name_value = $row["Name"];
-                    $due = $row["duex"];
-                    $paid = $row["paidx"];
-                    $difference = $row["differencex"];
+                    $infr_due = $infr_row["infr_due"];
+                    $infr_paid = $infr_row["infr_paid"];
+                    $infr_difference = $infr_row["infr_difference"];
                     
                    
                                         
@@ -116,12 +117,14 @@ $sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_d
                 }
                 
             } else{
-                echo "Oops! Something went wrong. Please try again later.";
+                //echo "Oops! Something went wrong. Please try again later.";
+                header("location: error.php");
+                    exit();
             }
         }
         
         // Close statement
-        mysqli_stmt_close($stmtx);
+        mysqli_stmt_close($infr_stmt);
         
         
            // Close connection
@@ -165,14 +168,14 @@ $sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_d
           <div class="card-body ">
                         <div class="form-group">
                             <label><b>Mobile Number</b></label>
-                            <input type="text" name="mobile_no" class="form-control <?php echo (!empty($phone_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $mobile_no; ?>" readonly>
-                            <span class="invalid-feedback"><?php echo $phone_err;?></span>
+                            <input type="text" name="mobile_no" class="form-control" value="<?php echo $mobile_no; ?>" readonly>
+                            
                         </div><!-- comment -->
                         
                         <div class="form-group">
                             <label><b>Name</b></label>
-                            <input type="text" name="name_value" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $name_value; ?>" readonly>
-                            <span class="invalid-feedback"><?php echo $name_err;?></span>
+                            <input type="text" name="name_value" class="form-control" value="<?php echo $name_value; ?>" readonly>
+                            
                         </div>
   </div>
 </div>
@@ -186,42 +189,66 @@ $sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_d
     <div class="card">
       <div class="card-body <?php echo $grade ?> ">
           <h5 class="card-title"><b>Security</b></h5>
-                        <div class="form-group">
+                        
+                         <div class="form-group">
                             <label>Cumulative Amount Due</label>
-                            <input type="text" name="due" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $due; ?>" readonly>
-                        </div>
+                            <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="sec_due" class="form-control" value="<?php echo $sec_due; ?>" readonly>
+                             <span class="input-group-text">.00</span>
+                         </div>
+                             </div>
                         
                         <div class="form-group">
                             <label>Amount Paid so Far </label>
-                            <input type="text" name="paid" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $paid; ?>" readonly>
+                            <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="sec_paid" class="form-control" value="<?php echo $sec_paid; ?>" readonly>
+                            <span class="input-group-text">.00</span>
                         </div>
+                             </div>
                         
                         <div class="form-group">
                             <label>Uncleared Balance</label>
-                            <input type="text" name="difference" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $difference; ?>" readonly>
+                            <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="sec_difference" class="form-control" value="<?php echo $sec_difference; ?>" readonly>
+                            <span class="input-group-text">.00</span>
                         </div>
         
-      </div>
+                        </div>
     </div>
   </div>
+      </div>
   <div class="col-sm-6">
     <div class="card">
       <div class="card-body">
           <h5 class="card-title"><b>Infrastructure</b></h5>
-        <div class="form-group">
+                        <div class="form-group">
                         <label>Cumulative Amount Due</label>
-                            <input type="text" name="duex" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $duex; ?>" readonly>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="infr_due" class="form-control" value="<?php echo $infr_due; ?>" readonly>
+                            <span class="input-group-text">.00</span>
                         </div>
-                        
+                        </div>
                         <div class="form-group">
                             <label>Amount Paid so Far </label>
-                            <input type="text" name="paidx" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $paidx; ?>" readonly>
+                            <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="infr_paid" class="form-control" value="<?php echo $infr_paid; ?>" readonly>
+                            <span class="input-group-text">.00</span>
                         </div>
+                            </div>
                         
                         <div class="form-group">
                             <label>Uncleared Balance</label>
-                            <input type="text" name="differencex" class="form-control <?php echo (!empty($name_err)) ? 'is-invalid' : ''; ?>" value="<?php echo $differencex; ?>" readonly>
+                            <div class="input-group mb-3">
+                            <span class="input-group-text">=N=</span>
+                            <input type="text" name="infr_difference" class="form-control" value="<?php echo $infr_difference; ?>" readonly>
+                            <span class="input-group-text">.00</span>
                         </div>
+                            </div>
       </div>
     </div>
   </div>
@@ -258,7 +285,7 @@ $sql = "select DISTINCT users.name_value Namev, users.mobile_no mobile, amount_d
                       <div class="card-footer text-muted">
                             <p><label> <b>Print | Navigate</b> </label></p>
                                 <input type="submit" class="btn btn-primary" value="Print Receipt"> |
-                                <a href="client/logout.php" class="btn btn-danger">Close</a>
+                                <a href="/client/account.php" class="btn btn-danger">Back</a>
                       </div>
                 </div>
                 
